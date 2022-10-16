@@ -1,0 +1,97 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.example.gassapp"
+4    android:versionCode="1"
+5    android:versionName="1.0.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="16"
+9        android:targetSdkVersion="31" />
+10    <!--
+11         The INTERNET permission is required for development. Specifically,
+12         the Flutter tool needs it to communicate with the running application
+13         to allow setting breakpoints, to provide hot reload, etc.
+14    -->
+15    <uses-permission android:name="android.permission.INTERNET" />
+15-->E:\FlutterProjects\gasapp\GazApp\android\app\src\debug\AndroidManifest.xml:7:5-66
+15-->E:\FlutterProjects\gasapp\GazApp\android\app\src\debug\AndroidManifest.xml:7:22-64
+16
+17    <application
+18        android:name="android.app.Application"
+18-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:5:9-42
+19        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+19-->[androidx.core:core:1.6.0] C:\Users\edbes\.gradle\caches\transforms-3\acbce933e4b464a5224ed377a62db1f5\transformed\core-1.6.0\AndroidManifest.xml:24:18-86
+20        android:debuggable="true"
+21        android:icon="@mipmap/ic_launcher"
+21-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:6:9-43
+22        android:label="gassapp"
+22-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:4:9-32
+23        android:usesCleartextTraffic="true" >
+23-->E:\FlutterProjects\gasapp\GazApp\android\app\src\debug\AndroidManifest.xml:8:18-53
+24        <activity
+24-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:7:9-27:20
+25            android:name="com.example.gassapp.MainActivity"
+25-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:8:13-41
+26            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+26-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:12:13-163
+27            android:exported="true"
+27-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:9:13-36
+28            android:hardwareAccelerated="true"
+28-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:13:13-47
+29            android:launchMode="singleTop"
+29-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:10:13-43
+30            android:theme="@style/LaunchTheme"
+30-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:11:13-47
+31            android:windowSoftInputMode="adjustResize" >
+31-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:14:13-55
+32
+33            <!--
+34                 Specifies an Android theme to apply to this Activity as soon as
+35                 the Android process has started. This theme is visible to the user
+36                 while the Flutter UI initializes. After that, this theme continues
+37                 to determine the Window background behind the Flutter UI.
+38            -->
+39            <meta-data
+39-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:19:13-22:17
+40                android:name="io.flutter.embedding.android.NormalTheme"
+40-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:20:15-70
+41                android:resource="@style/NormalTheme" />
+41-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:21:15-52
+42
+43            <intent-filter>
+43-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:23:13-26:29
+44                <action android:name="android.intent.action.MAIN" />
+44-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:24:17-68
+44-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:24:25-66
+45
+46                <category android:name="android.intent.category.LAUNCHER" />
+46-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:25:17-76
+46-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:25:27-74
+47            </intent-filter>
+48        </activity>
+49        <!--
+50 Don't delete the meta-data below.
+51             This is used by the Flutter tool to generate GeneratedPluginRegistrant.java
+52        -->
+53        <meta-data
+53-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:30:9-32:33
+54            android:name="flutterEmbedding"
+54-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:31:13-44
+55            android:value="2" />
+55-->E:\FlutterProjects\gasapp\GazApp\android\app\src\main\AndroidManifest.xml:32:13-30
+56
+57        <uses-library
+57-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
+58            android:name="androidx.window.extensions"
+58-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:26:13-54
+59            android:required="false" />
+59-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:27:13-37
+60        <uses-library
+60-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:28:9-30:40
+61            android:name="androidx.window.sidecar"
+61-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:29:13-51
+62            android:required="false" />
+62-->[androidx.window:window:1.0.0-beta04] C:\Users\edbes\.gradle\caches\transforms-3\49bc944d29f70d45aa5add8e43e3247e\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:30:13-37
+63    </application>
+64
+65</manifest>
