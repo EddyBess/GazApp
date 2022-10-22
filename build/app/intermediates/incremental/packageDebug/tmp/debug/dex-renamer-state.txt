@@ -1,4 +1,4 @@
-#Thu Oct 20 20:23:30 CEST 2022
-base.0=E\:\\FlutterProjects\\gasapp\\GazApp\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+#Sat Oct 22 17:18:45 CEST 2022
+base.0=/home/eddybessah/Documents/gasapp/gassapp/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

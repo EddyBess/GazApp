@@ -1,8 +1,8 @@
 import 'dart:convert';
-
+import 'package:async/async.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-
+import 'locationFunctions.dart';
 import 'package:geolocator/geolocator.dart';
 
 /// Determine the current position of the device.
@@ -54,10 +54,13 @@ class QueryTest extends StatefulWidget {
 }
 
 class _QueryTestState extends State<QueryTest> {
+
+  final AsyncMemoizer _memoizer = AsyncMemoizer();
+
   Future sendRequest(parameters) async {
     var url = Uri.https(
         "data.economie.gouv.fr", "/api/records/1.0/search/", parameters);
-    print(url);
+
     var response = await http.get(url);
 
     return response;
@@ -74,15 +77,29 @@ class _QueryTestState extends State<QueryTest> {
   var facets = [];
 
   var jsonNames = {};
-  List _position = [];
 
-  Future<Position> _getCurrentLocation() async {
+  _getCurrentLocation() async {
     Position position = await _determinePosition();
     return position;
   }
+  late Position _pos = _getCurrentLocation();
+
+  double _currentSliderValue = 5;
+
+   getStations() {
+    return Future.wait(facets
+        .map((facet) => sendRequest({
+              'dataset': 'prix-carburants-fichier-instantane-test-ods-copie',
+              'refine.id': facet["name"],
+            }))
+        .toList());
+  }
+  late Future <List<dynamic>> _future  = getStations();
 
   @override
   void initState() {
+
+
     super.initState();
     getNames().then((res) {
       var names = jsonDecode(res.body);
@@ -93,31 +110,34 @@ class _QueryTestState extends State<QueryTest> {
     });
     _getCurrentLocation().then((position) {
       setState(() {
-        _position = [
-          position.latitude, position.longitude,
-          15000
-        ];
-        print(_position);
+        _pos = position;
         sendRequest({
           'dataset': 'prix-carburants-fichier-instantane-test-ods-copie',
           'facet': 'id',
           'geofilter.distance':
-              '${position.latitude},${position.longitude},15000' //Filtre a actualiser en fonction de la position de l'utilisateur
+              '${position.latitude},${position.longitude},${_currentSliderValue * 1000}' //Filtre a actualiser en fonction de la position de l'utilisateur
         }).then((res) {
           var temp = jsonDecode(res.body)['facet_groups'][0]['facets'];
 
           setState(() {
             facets = temp;
+            _future  = getStations();
+           
           });
         });
       });
     });
+      
+  
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
     var height = MediaQuery.of(context).size.height;
+
     return Scaffold(
         body: SizedBox(
       height: height,
@@ -142,24 +162,22 @@ class _QueryTestState extends State<QueryTest> {
               children: [
                 IconButton(
                     onPressed: () {
-                      setState(() {});
+                      setState(() {
+                            _future = getStations();
+
+                      });
                     },
                     icon: const Icon(Icons.refresh))
               ],
             ),
           ),
           FutureBuilder(
-            future: Future.wait(facets
-                .map((facet) => sendRequest({
-                      'dataset':
-                          'prix-carburants-fichier-instantane-test-ods-copie',
-                      'refine.id': facet["name"],
-                    }))
-                .toList()),
-            builder: ((context, AsyncSnapshot<List<dynamic>> snapshot) {
+            future: _future,
+            builder: ((context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.hasData &&
                   snapshot.connectionState == ConnectionState.done) {
                 var records = snapshot.data;
+                
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -172,7 +190,7 @@ class _QueryTestState extends State<QueryTest> {
                         itemBuilder: ((context, index) {
                           var currentStat =
                               jsonDecode(records[index].body)["records"];
-
+                        
                           String prixMaj =
                               currentStat[0]['fields']['prix_maj'] ?? "";
                           var date =
@@ -187,15 +205,15 @@ class _QueryTestState extends State<QueryTest> {
                           var txtDiff = "";
 
                           if (diff.inDays >= 1 && diff.inDays > 0) {
-                            txtDiff = "Il y'a ${diff.inDays} jours";
+                            txtDiff = diff.inDays >1 ? "Il y'a ${diff.inDays} jours":"Il y'a ${diff.inDays} jour";
                           } else if (diff.inHours < 24 && diff.inHours > 0) {
-                            txtDiff = "Il y'a ${diff.inHours} heures";
+                            txtDiff = diff.inHours>1 ? "Il y'a ${diff.inHours} heures": "Il y'a ${diff.inHours} heure";
                           } else if (diff.inMinutes < 60 &&
                               diff.inMinutes > 0) {
-                            txtDiff = "Il y'a ${diff.inMinutes} minutes";
+                            txtDiff = diff.inMinutes>1?"Il y'a ${diff.inMinutes} minutes":"Il y'a ${diff.inMinutes} minute";
                           } else if (diff.inSeconds < 60 &&
                               diff.inSeconds > 0) {
-                            txtDiff = "Il y'a ${diff.inSeconds} secondes";
+                            txtDiff = diff.inSeconds>1?"Il y'a ${diff.inSeconds} secondes":"Il y'a ${diff.inSeconds} seconde";
                           } else {
                             txtDiff = "Aucune donnée de mise a jour";
                           }
@@ -204,6 +222,7 @@ class _QueryTestState extends State<QueryTest> {
                               null) {
                             return const Text("");
                           }
+                         
                           return Column(
                             children: [
                               Container(
@@ -221,6 +240,7 @@ class _QueryTestState extends State<QueryTest> {
                                 ),
                                 child: Card(
                                   color: const Color.fromRGBO(144, 252, 249, 1),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                   child: SizedBox(
                                     height: height * 30 / 100,
                                     width: width * 90 / 100,
@@ -229,19 +249,23 @@ class _QueryTestState extends State<QueryTest> {
                                           MainAxisAlignment.spaceEvenly,
                                       children: [
                                         Text(
-                                          "${jsonNames[currentStat[0]['fields']['id']]['nom']}",
+                                          "${jsonNames[currentStat[0]['fields']['id']]['marque']} à ${jsonNames[currentStat[0]['fields']['id']]['commune']}",
                                           style: const TextStyle(
-                                            fontSize: 20,
+                                            fontSize: 17,
                                             fontWeight: FontWeight.bold,
                                           ),
                                           textAlign: TextAlign.center,
                                         ),
                                         Text(
-                                            "${jsonNames[currentStat[0]['fields']['id']]['marque']}",
-                                            style:
-                                                const TextStyle(fontSize: 17)),
+                                          "Située à ${getDist(currentStat[0]['fields']['geom'], [_pos.latitude,_pos.longitude])} km",
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                           
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
                                         SizedBox(
-                                          height: height * 10 / 100,
+                                          height: height * 11 / 100,
                                           width: width * 80 / 100,
                                           child: Center(
                                             child: ListView.builder(
@@ -332,14 +356,14 @@ class _QueryTestState extends State<QueryTest> {
                                             ),
                                           ),
                                         ),
-                                        Text("Dernière mise à jour : $txtDiff")
+                                        Text(txtDiff)
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
                               SizedBox(
-                                height: height * 5 / 100,
+                                height: height * 3 / 100,
                               )
                             ],
                           );
@@ -348,15 +372,61 @@ class _QueryTestState extends State<QueryTest> {
                     ),
                   ],
                 );
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return SizedBox(
+                    height: 70 * height / 100,
+                    child: const Center(child: CircularProgressIndicator()));
               } else {
-                return const Expanded(
-                    child: Center(
-                  child: Text(
-                      "Aucune station n'a pu etre trouvée dans les environs"),
-                ));
+                return SizedBox(
+                    height: 70 * height / 100,
+                    child: const Center(child: Text("Aucune station n'a pu etre trouvee dans les environs")));
               }
             }),
           ),
+          Column(
+            children: [
+              SizedBox(height: 1*height/100,),
+              Text("Dans un rayon de : ${_currentSliderValue.round()} km",style: const TextStyle(fontSize: 15),),
+              Slider(
+                  value: _currentSliderValue,
+                  max: 100,
+                  min: 5,
+                  divisions: 19,
+                  inactiveColor: Colors.black,
+                  thumbColor: const Color.fromRGBO(100, 255, 74, 1),
+                  activeColor: const Color.fromRGBO(100, 255, 74, 1),
+                  onChanged: ((value) {
+                      setState(() {
+                      _currentSliderValue = value;
+                    });
+                  }),
+                  onChangeEnd: ((value) {
+
+                      _getCurrentLocation().then((position) {
+                    
+                      setState(() {
+                        _pos = position;
+                        sendRequest({
+                          'dataset': 'prix-carburants-fichier-instantane-test-ods-copie',
+                          'facet': 'id',
+                          'geofilter.distance':
+                              '${position.latitude},${position.longitude},${_currentSliderValue*1000}' //Filtre a actualiser en fonction de la position de l'utilisateur
+                        }).then((res) {
+                          var temp = jsonDecode(res.body)['facet_groups'][0]['facets'];
+
+                          setState(() {
+
+                            facets = temp;
+                            _future = getStations();
+
+                          });
+                        });
+                      
+                      });
+                    });
+                  }),),
+            ],
+          )
         ],
       ),
     ));

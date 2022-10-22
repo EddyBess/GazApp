@@ -285,8 +285,8 @@ repeatCount
 always
 noDrop
 $activityFilters
-flutter/keydata
 void
+flutter/keydata
 read
 memoryPressure
 flutter/restoration
@@ -910,8 +910,8 @@ SENTENCES
 isolate_snapshot_data
 TextInput.finishAutofillContext
 SPELLOUT
-surface
 com.google.android.clockwork.home.UPD...
+surface
 arch_disk_io_%d
 index
 _bounds
@@ -1113,8 +1113,8 @@ obscureText
 GooglePlayServicesErrorDialog
 android:target_state
 openLocationSettings
-texture
 secondaryActivityName.packageName
+texture
 WORDS
 SELECTION_CLICK
 windowMetricsCalculator
@@ -1365,8 +1365,8 @@ kotlin.collections.Set
 postfix
 value
 getWindowLayoutInfo
-REUSABLE_CLAIMED
 opaque
+REUSABLE_CLAIMED
 java.util.Iterator
 0x%08x
 TextInputClient.performAction
