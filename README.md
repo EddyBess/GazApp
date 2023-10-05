@@ -1,16 +1,15 @@
-# gassapp
+# GasApp
 
-A new Flutter project.
+This project uses the french government API to fetch GasStation Prices near the users.
 
-## Getting Started
+The user can watch the prices for the station from 5km to 100km near him.
 
-This project is a starting point for a Flutter application.
+## Preview
+![image](https://github.com/EddyBess/GazApp/assets/57587025/a92ef3e7-6028-4f26-8621-77d7512cbef9)
 
-A few resources to get you started if this is your first Flutter project:
+As you can see on this preview, several informations are available for the user : 
+  - The gaz type and prices
+  - The name/brand of the station
+  - The last time the prices where updated
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+The user can select the distance between him and the stations thanks to the slider at the bottom.
