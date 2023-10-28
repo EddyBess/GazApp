@@ -1,4 +1,4 @@
-#Sat Oct 22 16:07:17 CEST 2022
-base.0=/home/eddybessah/Documents/gasapp/gassapp/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
+#Thu Oct 05 19:22:49 CEST 2023
+base.0=/Volumes/Crucial X6/dev/mobile/flutter/GazApp/build/app/intermediates/dex/release/minifyReleaseWithR8/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
