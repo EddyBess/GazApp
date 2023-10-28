@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'querytest.dart';
+
+import 'homepage.dart';
 
 
   
@@ -9,8 +9,8 @@ void main() {
   
   runApp( MaterialApp(
      
-      theme: ThemeData(fontFamily: GoogleFonts.montserrat().fontFamily ),
-      home: const QueryTest(),
+      
+      home: const HomePage(),
     )
   );
 }
