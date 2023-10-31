@@ -20,19 +20,18 @@ class _HomePageState extends State<HomePage> {
     Position position = await determinePosition();
 
     Map<String, dynamic> parameters = {
-      "dataset": "prix-carburants-fichier-instantane-test-ods-copie",
-      "facet": "id",
-      "geofilter":
-          "${position.latitude},${position.longitude},${currentSliderValue * 1000}"
+      "location":"${position.longitude},${position.latitude}",
+      "distance": "$currentSliderValue"
     };
-
     return parameters;
   }
 
   Future<http.Response> getData(Map<String, dynamic> parameters) async {
+
     Uri queryUrl = Uri.http("127.0.0.1:8000", "/", parameters);
-    print(queryUrl);
+
     http.Response response = await http.get(queryUrl);
+    
     return response;
   }
 
@@ -48,7 +47,7 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(
-              height: height * 0.1,
+              height: height * 0.08,
             ),
             const Text(
               "Stations à proximité",
@@ -57,6 +56,7 @@ class _HomePageState extends State<HomePage> {
             FutureBuilder(
                 future: createParameters(),
                 builder: ((context, snapshot) {
+
                   if (snapshot.hasData &&
                       snapshot.connectionState == ConnectionState.done) {
                     return FutureBuilder(
@@ -64,15 +64,15 @@ class _HomePageState extends State<HomePage> {
                         builder: ((context, snapshot) {
                           if (snapshot.hasData &&
                               snapshot.connectionState ==
-                                  ConnectionState.done) {
+                                  ConnectionState.done) {                              
                             var data = jsonDecode(snapshot.data!.body);
                             return SizedBox(
                               width: width*0.9,
-                              height: height*0.8,
+                              height: height*0.75,
                               child: ListView.builder(
-                                itemCount: data["order"].length,
+                                itemCount: data.length,
                                 itemBuilder: (context, index) {
-                                  Station station = Station.fromJson(data["data"][data["order"][index]]);
+                                  Station station = Station.fromJson(data[index]);
                                   return SizedBox(
                                     width: width,
                                     child: Column(
@@ -86,17 +86,38 @@ class _HomePageState extends State<HomePage> {
                               ),
                             );
                           } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                            return SizedBox(
+                              height: height*0.75,
+                              child: const Center(
+                                child: CircularProgressIndicator(),
+                              ),
                             );
                           }
                         }));
                   } else {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return SizedBox(
+                      height: height*0.75,
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
                     );
                   }
-                }))
+                })),
+                Column(
+                  children: [
+                    Slider(
+                      min: 5,
+                      max: 100,
+                      divisions: 19,
+                      value: currentSliderValue, onChanged: ((value) {
+                      setState(() {
+                        currentSliderValue = value;
+                        createParameters();
+                      });
+                    })),
+                    Text("Dans un rayon de ${currentSliderValue.round()}km")
+                  ],
+                )
           ],
         ),
       ),

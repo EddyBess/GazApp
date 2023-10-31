@@ -20,8 +20,6 @@ class _CardComponentState extends State<CardComponent> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget.station.prices);
-    print(widget.station.name);
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
     return SizedBox(
@@ -29,14 +27,22 @@ class _CardComponentState extends State<CardComponent> {
       width: width,
       child: Container(
         decoration: const BoxDecoration(
-            color: Colors.blue,
+            color: Color(0xFF66CC66),
             borderRadius: BorderRadius.all(Radius.circular(10))),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(
-                  "${widget.station.name} ${widget.station.city} à ${widget.station.dist}km"),
+              RichText(text: 
+              TextSpan(
+                text: "${widget.station.name} ",
+                style: const TextStyle(fontWeight: FontWeight.bold,color: Colors.black),
+                children: [
+                  TextSpan(text: "${widget.station.city},${widget.station.dist.toStringAsFixed(0)} km",style: const TextStyle(fontWeight: FontWeight.normal)),
+                ]
+              )
+              ,),
+             
               SizedBox(
                 height: height * 0.1,
                 child: ListView.builder(
@@ -54,18 +60,26 @@ class _CardComponentState extends State<CardComponent> {
                                 height: 60,
                                 child: Container(
                                   decoration: BoxDecoration(
-                                      color: colors[index],
+                                      color:
+                                          widget.station.prices[index] != null
+                                              ? colors[index]
+                                              : Colors.red,
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10))),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("${widget.station.prices[index]}"),
-                                    ],
-                                  ),
+                                  child: Center(
+                                      child: Text(widget
+                                                  .station.prices[index] !=
+                                              null
+                                          ? "${widget.station.prices[index]}"
+                                          : "9.999",style: const TextStyle(fontWeight: FontWeight.bold),)
+                                          ),
                                 ),
                               ),
-                              Text(names[index]),
+                              const Divider(
+                                height: 5,
+                                color: Colors.transparent,
+                              ),
+                              Text(names[index],style: TextStyle(fontStyle: widget.station.prices[index]!=null ? FontStyle.normal:FontStyle.italic) ,),
                             ],
                           ),
                           SizedBox(
@@ -76,9 +90,7 @@ class _CardComponentState extends State<CardComponent> {
                     })),
               ),
               Text(widget.station.maj)
-            
             ]),
-
       ),
     );
   }
